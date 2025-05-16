@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import StatsCard from '../components/StatsCard';
-import Title from '../components/Title';
-
+import StatsCard from '../components/StatsCard';;	
 const Dashboard = () => (
+  
   <Container>
-    <Title>Dashboard</Title>
+  
     <StatsGrid>
       <StatsCard 
         title="Applications" 

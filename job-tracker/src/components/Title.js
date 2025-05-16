@@ -2,8 +2,9 @@ import styled from 'styled-components';
 
 const Title = styled.h1`
   font-size: 2rem;
-  margin: 0;
-  margin-bottom: 1rem;
+  color: #333;
 `
+
+
 
 export default Title;

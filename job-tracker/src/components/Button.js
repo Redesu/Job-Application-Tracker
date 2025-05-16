@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
 const Button = styled.button`
-  background: #0070f3;
+  background: #2563eb;
   color: white;
-  border: none;
-  padding: 12px 24px;
+  padding: 0.75rem 1.5rem;
   border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  
-  &:hover {
-    background: #0366d6;
-  }
-    `
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
 
-    export default Button
+  &:hover {
+    background: #1d4ed8;
+  }
+`;
+
+export default Button
