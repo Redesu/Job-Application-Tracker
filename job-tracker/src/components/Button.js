@@ -7,7 +7,11 @@ const Button = styled.button`
   border-radius: 4px;
   text-decoration: none;
   font-weight: 500;
+  border: none;
   transition: background 0.2s;
+  position: absolute;
+  top: 9rem;
+  right: 10.5rem;
 
   &:hover {
     background: #1d4ed8;
