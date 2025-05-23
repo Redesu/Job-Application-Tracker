@@ -8,6 +8,7 @@ import Input from '@/components/Input';
 import Label from '@/components/Label';
 import InputGroup from '@/components/InputGroup';
 import SubmitButton from '@/components/SubmitButton';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function AddJobPage() {
      const { data: session } = useSession({required: false});
@@ -26,12 +27,10 @@ export default function AddJobPage() {
     router.push('/jobs');
     }
 
-    // if(!session){
-    //     router.push('/auth/login');
-    // }
 
     return (
     <FormContainer>
+      <AuthGuard>
       <h1>Add New Job Application</h1>
       <Form onSubmit={handleSubmit}>
         <InputGroup>
@@ -69,6 +68,7 @@ export default function AddJobPage() {
 
         <SubmitButton type="submit">Save Application</SubmitButton>
       </Form>
+      </AuthGuard>
     </FormContainer>
   );
 }

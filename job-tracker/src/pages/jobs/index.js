@@ -1,25 +1,22 @@
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+
+import Button from '@/components/Button';
 import {
     JobCard,
     JobList
-} from '../../components/Job';
-import Button from '../../components/Button';
-import PageContainer from '../../components/PageContainer';
+} from '@/components/Job'
 import Link from 'next/link';
-import Title from '../../components/Title';
-
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import PageContainer from '@/components/PageContainer';
+import Title from '@/components/Title';
+import AuthGuard from '@/components/AuthGuard';
 
 export default function JobsPage(){
     const { data: session, status } = useSession({required: false});
-    const router = useRouter;
     const [jobs, setJobs] = useState([]);
     
     useEffect(() => {
-        // if(status === "unauthenticated"){
-        //     router.push("/auth/login");
-        // }
         setJobs([
             { id: 1, company: 'Tech Corp', position: 'Frontend Developer', status: 'Applied' },
             { id: 2, company: 'Design Co', position: 'UI Designer', status: 'Interview' }
@@ -31,6 +28,7 @@ export default function JobsPage(){
     }
     return(
         <PageContainer>
+          <AuthGuard>
         <Title>Your Job Applications</Title>
         <Link href="/jobs/add">
         <Button>Add New</Button>
@@ -46,6 +44,7 @@ export default function JobsPage(){
           </JobCard>
         ))}
       </JobList>
+      </AuthGuard>
     </PageContainer>
     );
 }
