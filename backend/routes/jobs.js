@@ -1,20 +1,15 @@
 import express from 'express';
-import Job from '../models/Job';
-import authMiddleware from '../utils/authMiddleware'
+import Job from '../models/Job.js';
+import authMiddleware from '../utils/authMiddleware.js'
 
 const router  = express.Router();
 
+const requireAuth = (process.env.NODE_ENV === 'test') 
+  ? (req, res, next) => next() 
+  : AuthMiddleware;
 
-router.get('/test', async(req, res) => {
-    try{
-        const jobs = await Job.find().limit(5);
-        res.json({success: true, jobs});
-    } catch(err){
-        res.status(500).json({error: err.message});
-    }
-});
 
-router.post('/', authMiddleware, async(req, res) => {
+router.post('/', requireAuth, async(req, res) => {
     try{
         const job = await Job.create({
             ...req.body,

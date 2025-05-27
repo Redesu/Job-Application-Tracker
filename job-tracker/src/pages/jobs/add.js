@@ -21,10 +21,30 @@ export default function AddJobPage() {
     });
 
     const handleSubmit = async(e) => {
-        e.preventDefault();
-    console.log('Would send to API:', formData);
-    alert('Job added (will save to database later)');
-    router.push('/jobs');
+      e.preventDefault();
+      try {
+        const response = await fetch('/api/jobs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...formData,
+            githubUserId: session.user.githubId,
+            githubUsername: session.user.login
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add job');
+        }
+        const data = await response.json();
+        console.log(data);
+        router.push('/jobs');
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
     }
 
 
