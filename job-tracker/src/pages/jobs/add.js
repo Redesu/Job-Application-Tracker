@@ -23,15 +23,17 @@ export default function AddJobPage() {
     const handleSubmit = async(e) => {
       e.preventDefault();
       try {
-        const response = await fetch('/api/jobs', {
+
+        const token = localStorage.getItem('token');
+        console.log(token)
+        const response = await fetch('http://localhost:5000/api/jobs', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
-            ...formData,
-            githubUserId: session.user.githubId,
-            githubUsername: session.user.login
+            ...formData
           }),
         });
 

@@ -1,23 +1,19 @@
 import express from 'express';
 import Job from '../models/Job.js';
-import authMiddleware from '../utils/authMiddleware.js'
-
+import { verifyJWT } from '../middleware/auth.js';
 const router  = express.Router();
 
-const requireAuth = (process.env.NODE_ENV === 'test') 
-  ? (req, res, next) => next() 
-  : AuthMiddleware;
-
-
-router.post('/', requireAuth, async(req, res) => {
+router.use(verifyJWT);
+router.post('/', async(req, res) => {
+    
     try{
         const job = await Job.create({
             ...req.body,
-            createdBy: req.user._id
+            createdBy: req.user.userId
         });
         res.status(201).json(job);
     } catch(err){
-        res.status(500).json({error: err.message});
+        res.status(401).json({error: err.message});
     }
 });
 
