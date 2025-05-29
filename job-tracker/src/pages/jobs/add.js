@@ -19,19 +19,20 @@ export default function AddJobPage() {
         position: '',
         status: 'Applied'
     });
+    console.log('Session data: ', session);
 
     const handleSubmit = async(e) => {
       e.preventDefault();
       try {
-
-        const token = localStorage.getItem('token'); 
-        alert(token)
-        console.log(token)
+        
+        if (!session || !session.jwt) {
+          throw new Error('Unauthorized');
+        }
         const response = await fetch('http://localhost:5000/api/jobs', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${session.backendToken}`
           },
           body: JSON.stringify({
             ...formData
@@ -46,7 +47,7 @@ export default function AddJobPage() {
         router.push('/jobs');
       } catch (error) {
         console.error(error);
-        // alert(error.message);
+        alert(error.message);
       }
     }
 

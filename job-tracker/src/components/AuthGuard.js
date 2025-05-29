@@ -12,4 +12,5 @@ export default function AuthGuard({ children }) {
 
   if (status === "loading") return null;
    return <>{children}</>;
+
 }

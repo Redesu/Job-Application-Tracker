@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import { signOut, useSession } from 'next-auth/react';
 
 const HeaderContainer = styled.header`
   background: #ffffff;
@@ -38,21 +39,42 @@ const NavLink = styled.span`  // Changed from 'a' to 'span'
   }
 `;
 
+const LogoutButton = styled.button`
+  background: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  border: none;
+  transition: background 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+`;
+
+
 export default function Header() {
+  const { data: session } = useSession();
   return (
     <HeaderContainer>
       <Nav>
-        <Link href="/" passHref legacyBehavior>
-          <Logo as="a">JobTracker</Logo>
+        <Link href="/" passHref>
+          <Logo>JobTracker</Logo>
         </Link>
         
         <NavLinks>
-          <Link href="/" passHref legacyBehavior>
-            <NavLink as="a">Dashboard</NavLink>
+          <Link href="/" passHref>
+            <NavLink>Dashboard</NavLink>
           </Link>
-          <Link href="/jobs" passHref legacyBehavior>
-            <NavLink as="a">Applications</NavLink>
+          <Link href="/jobs" passHref>
+            <NavLink>Applications</NavLink>
           </Link>
+        {session && (
+          <LogoutButton onClick={() => signOut()}>Logout</LogoutButton>
+        )}
         </NavLinks>
       </Nav>
     </HeaderContainer>

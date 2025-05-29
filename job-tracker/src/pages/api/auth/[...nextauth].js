@@ -37,12 +37,37 @@ export default NextAuth({
                     })
                 });
                 if (!response.ok) throw new Error('Backend user handling failed');
+                const { token: jwtToken } = await response.json();
+                token.jwtToken = jwtToken;
                 return true;
             } catch (error) {
                 console.error(error);
                 return false;
             }
-        }
+
+        },
+        async jwt({ token, user, account }) {
+            if (account && user) {
+                token.backendToken = user.backendToken;
+                token.accessToken = account.access_token;
+            }
+            return token;
+        },
+
+        async session({ session, token }) {
+            session.backendToken = token.backendToken;
+            session.accessToken = token.accessToken;
+            session.user.id = token.sub;
+            return session;
+        },
+
     },
     secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        strategy: 'jwt'
+    },
+    pages: {
+        signIn: '/auth/login',
+        signOut: '/auth/logout'
+    }
 })
