@@ -24,7 +24,8 @@ export default function AddJobPage() {
       e.preventDefault();
       try {
 
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); 
+        alert(token)
         console.log(token)
         const response = await fetch('http://localhost:5000/api/jobs', {
           method: 'POST',
@@ -45,7 +46,7 @@ export default function AddJobPage() {
         router.push('/jobs');
       } catch (error) {
         console.error(error);
-        alert(error.message);
+        // alert(error.message);
       }
     }
 

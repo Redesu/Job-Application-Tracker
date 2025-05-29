@@ -3,13 +3,17 @@ import express from 'express';
 import connectDB from './utils/dbConnect.js';
 import jobRoutes from './routes/jobs.js';
 import cors from 'cors';
+import { verifyJWT } from './middleware/auth.js';
+import auth from './routes/auth.js';
 
 const app = express();
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }));
-app.use('/api/jobs', jobRoutes);
+app.use(express.json());
+app.use('/api/jobs', verifyJWT, jobRoutes);
+app.use('/auth', auth);
 
 (async () => {
     try {
