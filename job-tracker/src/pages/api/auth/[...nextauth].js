@@ -36,31 +36,34 @@ export default NextAuth({
                         accessToken: account.access_token
                     })
                 });
+
                 if (!response.ok) throw new Error('Backend user handling failed');
-                const { token: jwtToken } = await response.json();
-                token.jwtToken = jwtToken;
+
+                const { token: backendToken, userId } = await response.json();
+                user.backendToken = backendToken;
+                user.userId = userId;
                 return true;
             } catch (error) {
                 console.error(error);
                 return false;
             }
-
         },
         async jwt({ token, user, account }) {
+            // Initial sign in
             if (account && user) {
                 token.backendToken = user.backendToken;
                 token.accessToken = account.access_token;
+                token.userId = user.userId;
             }
             return token;
         },
-
         async session({ session, token }) {
+            // Send backend token to client
             session.backendToken = token.backendToken;
             session.accessToken = token.accessToken;
             session.user.id = token.sub;
             return session;
-        },
-
+        }
     },
     secret: process.env.NEXTAUTH_SECRET,
     session: {

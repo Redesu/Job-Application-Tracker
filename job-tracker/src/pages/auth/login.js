@@ -1,6 +1,7 @@
-// pages/login.js
 import { signIn } from "next-auth/react";
 import styled from 'styled-components';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const LoginContainer = styled.div`
   text-align: center;
@@ -25,6 +26,15 @@ const LoginButton = styled.button`
 `;
 
 export default function Login() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  if (status === 'authenticated') {
+    router.push('/');
+  }
+
+  if(status === 'loading') return null;
+  
   return (
     <LoginContainer>
       <h1>Job Tracker Login</h1>

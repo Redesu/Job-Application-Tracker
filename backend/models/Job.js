@@ -12,6 +12,11 @@ const JobSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    userId: {
+        type: mongoose.Schema.Types.String,
+        ref: 'User',
+        required: true
     }
 }, {
     timestamps: true

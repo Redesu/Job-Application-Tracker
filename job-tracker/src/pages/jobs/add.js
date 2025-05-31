@@ -11,87 +11,84 @@ import SubmitButton from '@/components/SubmitButton';
 import AuthGuard from '@/components/AuthGuard';
 
 export default function AddJobPage() {
-     const { data: session } = useSession({required: false});
-    const router = useRouter();
-    
-    const [formData, setFormData] = useState({
-        company: '',
-        position: '',
-        status: 'Applied'
-    });
-    console.log('Session data: ', session);
+  const { data: session } = useSession();
+  const router = useRouter();
 
-    const handleSubmit = async(e) => {
-      e.preventDefault();
-      try {
-        
-        if (!session || !session.jwt) {
-          throw new Error('Unauthorized');
-        }
-        const response = await fetch('http://localhost:5000/api/jobs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.backendToken}`
-          },
-          body: JSON.stringify({
-            ...formData
-          }),
-        });
+  const [formData, setFormData] = useState({
+    company: '',
+    position: '',
+    status: 'Applied'
+  });
 
-        if (!response.ok) {
-          throw new Error('Failed to add job');
-        }
-        const data = await response.json();
-        console.log(data);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+
+      const response = await fetch('http://localhost:5000/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.backendToken}`
+        },
+        body: JSON.stringify({
+          ...formData,
+          userId: session.userId
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add job');
+      } else {
+        alert('Job added successfully');
         router.push('/jobs');
-      } catch (error) {
-        console.error(error);
-        alert(error.message);
       }
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
+  }
 
 
-    return (
+  return (
     <FormContainer>
       <AuthGuard>
-      <h1>Add New Job Application</h1>
-      <Form onSubmit={handleSubmit}>
-        <InputGroup>
-          <Label>Company</Label>
-          <Input 
-            type="text" 
-            value={formData.company}
-            onChange={(e) => setFormData({...formData, company: e.target.value})}
-            required
-          />
-        </InputGroup>
+        <h1>Add New Job Application</h1>
+        <Form onSubmit={handleSubmit}>
+          <InputGroup>
+            <Label>Company</Label>
+            <Input
+              type="text"
+              value={formData.company}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              required
+            />
+          </InputGroup>
 
-        <InputGroup>
-          <Label>Position</Label>
-          <Input 
-            type="text" 
-            value={formData.position}
-            onChange={(e) => setFormData({...formData, position: e.target.value})}
-            required
-          />
-        </InputGroup>
+          <InputGroup>
+            <Label>Position</Label>
+            <Input
+              type="text"
+              value={formData.position}
+              onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+              required
+            />
+          </InputGroup>
 
-        <InputGroup>
-          <Label>Status</Label>
-          <select
-            value={formData.status}
-            onChange={(e) => setFormData({...formData, status: e.target.value})}
-          >
-            <option value="Applied">Applied</option>
-            <option value="Interview">Interview</option>
-            <option value="Offer">Offer</option>
-            <option value="Rejected">Rejected</option>
-          </select>
-        </InputGroup>
+          <InputGroup>
+            <Label>Status</Label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            >
+              <option value="Applied">Applied</option>
+              <option value="Interview">Interview</option>
+              <option value="Offer">Offer</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </InputGroup>
 
-        <SubmitButton type="submit">Save Application</SubmitButton>
-      </Form>
+          <SubmitButton type="submit">Save Application</SubmitButton>
+        </Form>
       </AuthGuard>
     </FormContainer>
   );

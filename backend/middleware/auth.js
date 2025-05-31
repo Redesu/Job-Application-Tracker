@@ -14,7 +14,8 @@ export function verifyJWT(req, res, next) {
             console.log("JWT verification failed: ", err);
             return res.status(403).json({ error: 'Forbidden' }); // 403 is more appropriate for invalid tokens
         }
-        req.user = decoded;
+         console.log('Decoded JWT:', decoded);
+        req.user = { userId: decoded.userId };
         next();
     });
 }
