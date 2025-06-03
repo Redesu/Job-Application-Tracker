@@ -8,12 +8,8 @@ const router = express.Router();
 router.post('/handle-github-login', async (req, res) => {
   try {
     const { githubId, login, name, avatarUrl, profileUrl } = req.body;
-
-
-    // Check if user exists
     let user = await User.findOne({ githubId });
 
-    // Create new user if doesn't exist
     if (!user) {
       user = await User.create({
         githubId,
@@ -29,7 +25,7 @@ router.post('/handle-github-login', async (req, res) => {
       { expiresIn: '24h' }
     )
     console.log('github login successful for user: ', user);
-    // Return minimal needed data to frontend
+
     res.json({
       success: true,
       token,

@@ -1,4 +1,3 @@
-// backend/models/User.js
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
@@ -7,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   avatarUrl: { type: String, required: true },
   profileUrl: { type: String, required: true },
-  accessToken: { type: String, select: false }, // Optional: store GitHub token
+  accessToken: { type: String, select: false },
   createdAt: { type: Date, default: Date.now }
 });
 

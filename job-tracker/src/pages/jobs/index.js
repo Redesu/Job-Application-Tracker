@@ -11,6 +11,7 @@ import Link from 'next/link';
 import PageContainer from '@/components/PageContainer';
 import Title from '@/components/Title';
 import AuthGuard from '@/components/AuthGuard';
+import { authFetch } from '@/lib/api';
 
 export default function JobsPage(){
     const { data: session, status } = useSession({required: false});
@@ -26,18 +27,28 @@ export default function JobsPage(){
 
     const fetchJobs = async () => {
       try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
+
+        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
           headers: {
             Authorization: `Bearer ${session.backendToken}`
           }
-        });
-
-          
-        if(!response.ok){
-          throw new Error('Failed to fetch jobs');
-        }
+        })
         const data = await response.json();
         setJobs(data);
+        console.log(data);
+    
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
+        //   headers: {
+        //     Authorization: `Bearer ${session.backendToken}`
+        //   }
+        // });
+
+          
+        // if(!response.ok){
+        //   throw new Error('Failed to fetch jobs');
+        // }
+        // const data = await response.json();
+        // setJobs(data);
       } catch(err){
         console.log(err);
       } 

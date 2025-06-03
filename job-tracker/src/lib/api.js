@@ -1,12 +1,26 @@
-export async function createJob(jobData) {
-  const session = await getSession();
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/jobs`, {
-    method: 'POST',
+import { signOut, signIn } from "next-auth/react";
+export async function authFetch(url, options = {}) {
+  const response = await fetch(url, {
+    ...options,
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${session.jwt}` // JWT from NextAuth
-    },
-    body: JSON.stringify(jobData)
+      ...options.headers,
+      'Authorization': `Bearer ${session.backendToken}`
+    }
   });
-  return await response.json();
+
+  if (response.status === 401) {
+    const errorData = await response.json();
+    if (errorData.error === 'TOKEN_EXPIRED') {
+      await signOut({ callbackUrl: '/auth/login?sessionExpired=true' });
+      return Promise.reject(new Error('Session expired. Please log in again.'));
+    }
+  }
+
+  if (!response.ok) {
+    const error = await response.json();
+    return Promise.reject(error);
+  }
+
+  return response
+
 }

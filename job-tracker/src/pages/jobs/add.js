@@ -9,6 +9,7 @@ import Label from '@/components/Label';
 import InputGroup from '@/components/InputGroup';
 import SubmitButton from '@/components/SubmitButton';
 import AuthGuard from '@/components/AuthGuard';
+import { authFetch } from '@/lib/api';
 
 export default function AddJobPage() {
   const { data: session } = useSession();
@@ -23,17 +24,15 @@ export default function AddJobPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
-      const response = await fetch('http://localhost:5000/api/jobs', {
+      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.backendToken}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           ...formData,
           userId: session.userId
-        }),
+        })
       });
 
       if (!response.ok) {
@@ -46,6 +45,31 @@ export default function AddJobPage() {
       console.error(error);
       alert(error.message);
     }
+
+    // try {
+
+    //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${session.backendToken}`
+    //     },
+    //     body: JSON.stringify({
+    //       ...formData,
+    //       userId: session.userId
+    //     }),
+    //   });
+
+    //   if (!response.ok) {
+    //     throw new Error('Failed to add job');
+    //   } else {
+    //     alert('Job added successfully');
+    //     router.push('/jobs');
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   alert(error.message);
+    // }
   }
 
 
