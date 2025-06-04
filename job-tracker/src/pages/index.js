@@ -1,8 +1,36 @@
-import styled from 'styled-components';
-import StatsCard from '../components/StatsCard';;	
-const Dashboard = () => (
+import { useSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { fetchPublicStats, fetchStats } from '@/lib/api';
+import Button from '@/components/Button';
+import StatsCard from '@/components/StatsCard';
+import StatsGrid from '@/components/StatsGrid';
+import DashboardContainer from '@/components/DashboardContainer';
+import Link from 'next/link';
+const Dashboard = () => {
+  const {data: session, status} = useSession();
+  const [stats, setStats] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchStats();
+    } else if (status === "unauthenticated") {
+      fetchPublicStats();
+    }
+  }, [status]);
+
+  try{
+    const response = await fetchStats(`${process.env.NEXT_PUBLIC_API_URL}/api/stats`, {session});
+    const data = await response.json();
+    setStats(data);
+  } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+
+
   
-  <Container>
+  <DashboardContainer>
   
     <StatsGrid>
       <StatsCard 
@@ -16,19 +44,9 @@ const Dashboard = () => (
         trend="→ 0 pending" 
       />
     </StatsGrid>
-  </Container>
-);
+  </DashboardContainer>
+};
 
-// Styled Components
-const Container = styled.div`
-  padding: 2rem;
-`;
-
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-`;
 
 export default function Home() {
   return <Dashboard />;

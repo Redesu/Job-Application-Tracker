@@ -25,6 +25,7 @@ export default function AddJobPage() {
     e.preventDefault();
     try {
       const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
+        session,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -32,7 +33,7 @@ export default function AddJobPage() {
         body: JSON.stringify({
           ...formData,
           userId: session.userId
-        })
+        }),
       });
 
       if (!response.ok) {
