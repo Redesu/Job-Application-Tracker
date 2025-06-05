@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import connectDB from './utils/dbConnect.js';
 import jobRoutes from './routes/jobs.js';
+import publicStatsRouter from './routes/publicStats.js';
 import cors from 'cors';
 import { verifyJWT } from './middleware/auth.js';
 import auth from './routes/auth.js';
@@ -13,6 +14,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use('/api/jobs', verifyJWT, jobRoutes);
+app.use('/api/publicStats', publicStatsRouter);
 app.use('/auth', auth);
 
 (async () => {
