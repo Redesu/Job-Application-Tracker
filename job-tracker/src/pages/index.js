@@ -7,44 +7,55 @@ import StatsGrid from '@/components/StatsGrid';
 import DashboardContainer from '@/components/DashboardContainer';
 import Link from 'next/link';
 const Dashboard = () => {
-  const {data: session, status} = useSession();
-  const [stats, setStats] = useState(null);
+  const { data: session, status } = useSession();
+  const [stats, setStats] = useState(0);
+  const [publicStats, setPublicStats] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      fetchStats();
-    } else if (status === "unauthenticated") {
-      fetchPublicStats();
+    async function getStats() {
+      try {
+        if (status === "authenticated") {
+          const data = await fetchStats(`${process.env.NEXT_PUBLIC_API_URL}/api/stats`, { session });
+          setStats(data);
+        } else if (status === "unauthenticated") {
+          const data = await fetchPublicStats(`${process.env.NEXT_PUBLIC_API_URL}/api/publicStats`);
+          setPublicStats(data);
+        }
+      } catch (err) {
+        setError(err);
+      }
     }
+    getStats();
   }, [status]);
 
-  try{
-    const response = await fetchStats(`${process.env.NEXT_PUBLIC_API_URL}/api/stats`, {session});
-    const data = await response.json();
-    setStats(data);
-  } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
+  console.log(status, stats, publicStats);
 
 
-  
+
+
+
+
+  return (
   <DashboardContainer>
-  
+
     <StatsGrid>
-      <StatsCard 
-        title="Applications" 
-        count={24} 
-        trend="↑ 3 this week" 
-      />
-      <StatsCard 
-        title="Interviews" 
-        count={5} 
-        trend="→ 0 pending" 
-      />
+      {status == "unauthenticated" && publicStats && (
+        <StatsGrid>
+          
+          <StatsCard title="Total users" count={publicStats.totalUsers} trend={publicStats?.weeklyUsersChange ? `↑ ${publicStats.weeklyUsersChange} this week` : 'No data'}/>
+          <StatsCard title="Total Interviews" count={publicStats.totalApplications} trend={publicStats?.weeklyInterviewsChange ? `↑ ${publicStats.weeklyInterviewsChange} this week` : 'No data'}/>
+        </StatsGrid>
+      )}
+      {status === "authenticated" && (
+        <>
+          <StatsCard title="Applications" count={stats.totalApplications || 0} trend={stats?.weeklyChange ? `↑ ${stats.weeklyChange} this week` : 'No data'} />
+          <StatsCard title="Interviews" count={stats?.totalInterviews} trend={stats?.weeklyChange ? `↑ ${stats.weeklyChange} this week` : 'No data'} />
+        </>
+      )}
     </StatsGrid>
   </DashboardContainer>
+  );
 };
 
 

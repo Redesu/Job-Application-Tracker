@@ -16,7 +16,9 @@ router.get('/', verifyJWT, async (req, res) => {
         const weeklyApplications = await Job.countDocuments({
             userId,
             createdAt: { $gte: oneWeekAgo },
-        });
+        }); 
+        
+        console.log(`User ID: ${userId}, Total Applications: ${totalApplications}, Total Interviews: ${totalInterviews}, Weekly Applications: ${weeklyApplications}`);
 
         res.json({
             totalApplications,

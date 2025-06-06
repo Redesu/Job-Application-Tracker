@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
-export const DashboardContainer = styled.div`
+const DashboardContainer = styled.div`
   padding: 2rem;
 `;
+
+export default DashboardContainer;
