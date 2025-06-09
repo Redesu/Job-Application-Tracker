@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/dist/server/api-utils';
 
 const HeaderContainer = styled.header`
   background: #ffffff;
@@ -73,7 +74,7 @@ export default function Header() {
             <NavLink>Applications</NavLink>
           </Link>
         {session && (
-          <LogoutButton onClick={() => signOut()}>Logout</LogoutButton>
+          <LogoutButton href="/auth/logout" onClick={() => signOut({ callbackUrl: '/auth/login'})}>Logout</LogoutButton>
         )}
         </NavLinks>
       </Nav>

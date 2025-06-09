@@ -47,30 +47,6 @@ export default function AddJobPage() {
       alert(error.message);
     }
 
-    // try {
-
-    //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${session.backendToken}`
-    //     },
-    //     body: JSON.stringify({
-    //       ...formData,
-    //       userId: session.userId
-    //     }),
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error('Failed to add job');
-    //   } else {
-    //     alert('Job added successfully');
-    //     router.push('/jobs');
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   alert(error.message);
-    // }
   }
 
 

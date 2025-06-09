@@ -22,7 +22,7 @@ router.post('/handle-github-login', async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, username: login, name },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '12h' }
     )
     console.log('github login successful for user: ', user);
 

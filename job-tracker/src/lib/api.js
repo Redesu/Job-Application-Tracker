@@ -33,11 +33,12 @@ export async function authFetch(url, { session, ...options } = {}) {
 export async function fetchStats(url, { session } = {
   method: 'GET',
 }) {
-  return handleFetch(url, {
+  const response = await handleFetch(url, {
     headers: {
       'Authorization': `Bearer ${session?.backendToken}`
     }
   });
+  return response.json();
 }
 
 export async function fetchPublicStats(url) {

@@ -1,5 +1,5 @@
 import express from 'express'
-import Job from '../models/Job'
+import Job from '../models/Job.js'
 import { verifyJWT } from '../middleware/auth.js'
 
 const router = express.Router()
@@ -15,15 +15,21 @@ router.get('/', verifyJWT, async (req, res) => {
 
         const weeklyApplications = await Job.countDocuments({
             userId,
+            status: 'Applied',
             createdAt: { $gte: oneWeekAgo },
         }); 
-        
-        console.log(`User ID: ${userId}, Total Applications: ${totalApplications}, Total Interviews: ${totalInterviews}, Weekly Applications: ${weeklyApplications}`);
+
+        const weeklyInterviews = await Job.countDocuments({
+            userId,
+            status: 'Interview',
+            createdAt: { $gte: oneWeekAgo },
+        });
 
         res.json({
             totalApplications,
             totalInterviews,
-            weeklyChange: weeklyApplications,
+            weeklyApplications,
+            weeklyInterviews,
             pendingInterviews: totalInterviews
         });
     } catch (err) {

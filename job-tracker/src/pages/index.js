@@ -1,11 +1,11 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { fetchPublicStats, fetchStats } from '@/lib/api';
-import Button from '@/components/Button';
 import StatsCard from '@/components/StatsCard';
 import StatsGrid from '@/components/StatsGrid';
 import DashboardContainer from '@/components/DashboardContainer';
-import Link from 'next/link';
+import AuthGuard from '@/components/AuthGuard';
+
 const Dashboard = () => {
   const { data: session, status } = useSession();
   const [stats, setStats] = useState(0);
@@ -29,28 +29,22 @@ const Dashboard = () => {
     getStats();
   }, [status]);
 
-  console.log(status, stats, publicStats);
-
-
-
-
-
-
   return (
   <DashboardContainer>
 
     <StatsGrid>
       {status == "unauthenticated" && publicStats && (
         <StatsGrid>
-          
           <StatsCard title="Total users" count={publicStats.totalUsers} trend={publicStats?.weeklyUsersChange ? `↑ ${publicStats.weeklyUsersChange} this week` : 'No data'}/>
           <StatsCard title="Total Interviews" count={publicStats.totalApplications} trend={publicStats?.weeklyInterviewsChange ? `↑ ${publicStats.weeklyInterviewsChange} this week` : 'No data'}/>
         </StatsGrid>
       )}
       {status === "authenticated" && (
         <>
-          <StatsCard title="Applications" count={stats.totalApplications || 0} trend={stats?.weeklyChange ? `↑ ${stats.weeklyChange} this week` : 'No data'} />
-          <StatsCard title="Interviews" count={stats?.totalInterviews} trend={stats?.weeklyChange ? `↑ ${stats.weeklyChange} this week` : 'No data'} />
+        <AuthGuard>
+          <StatsCard title="Applications" count={stats.totalApplications || 0} trend={stats?.weeklyApplications ? `↑ ${stats.weeklyApplications} this week` : 'No data'} />
+          <StatsCard title="Interviews" count={stats?.totalInterviews} trend={stats?.weeklyInterviews ? `↑ ${stats.weeklyInterviews} this week` : 'No data'} />
+        </AuthGuard>
         </>
       )}
     </StatsGrid>

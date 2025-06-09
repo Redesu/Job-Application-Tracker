@@ -35,18 +35,6 @@ export default function JobsPage() {
       setJobs(data);
       console.log(data);
 
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
-      //   headers: {
-      //     Authorization: `Bearer ${session.backendToken}`
-      //   }
-      // });
-
-
-      // if(!response.ok){
-      //   throw new Error('Failed to fetch jobs');
-      // }
-      // const data = await response.json();
-      // setJobs(data);
     } catch (err) {
       console.log(err);
     }
