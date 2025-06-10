@@ -1,6 +1,5 @@
 import { signOut, signIn } from "next-auth/react";
 
-// Helper function for handling fetch and errors
 async function handleFetch(url, options = {}) {
   const response = await fetch(url, options);
 
@@ -42,7 +41,6 @@ export async function fetchStats(url, { session } = {
 }
 
 export async function fetchPublicStats(url) {
-  console.log("Fetching public stats from:", url);
   const response = await fetch(url, {
     contentType: 'application/json',
     method: 'GET',

@@ -24,7 +24,6 @@ router.post('/handle-github-login', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '12h' }
     )
-    console.log('github login successful for user: ', user);
 
     res.json({
       success: true,

@@ -29,10 +29,15 @@ const Dashboard = () => {
     getStats();
   }, [status]);
 
+if(error){
+  return null;
+}
+
   return (
   <DashboardContainer>
 
     <StatsGrid>
+      {status === "loading" && <p>Loading...</p>}
       {status == "unauthenticated" && publicStats && (
         <StatsGrid>
           <StatsCard title="Total users" count={publicStats.totalUsers} trend={publicStats?.weeklyUsersChange ? `↑ ${publicStats.weeklyUsersChange} this week` : 'No data'}/>
