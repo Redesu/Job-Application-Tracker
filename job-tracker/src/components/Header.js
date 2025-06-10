@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/router';
 
 const HeaderContainer = styled.header`
   background: #ffffff;
@@ -56,9 +56,25 @@ const LogoutButton = styled.button`
   }
 `;
 
+const LoginButton = styled.button`
+  background: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  border: none;
+  transition: background 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+`
 
 export default function Header() {
   const { data: session } = useSession();
+  const router = useRouter();
   return (
     <HeaderContainer>
       <Nav>
@@ -76,6 +92,10 @@ export default function Header() {
         {session && (
           <LogoutButton href="/auth/logout" onClick={() => signOut({ callbackUrl: '/auth/login'})}>Logout</LogoutButton>
         )}
+        {!session && (
+          <LoginButton href="/auth/login" onClick={() => router.push('/auth/login')}>Login</LoginButton>
+        )}
+        
         </NavLinks>
       </Nav>
     </HeaderContainer>
