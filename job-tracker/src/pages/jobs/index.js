@@ -54,7 +54,7 @@ export default function JobsPage() {
     <PageContainer>
       <AuthGuard>
         <Title>Your Job Applications</Title>
-        <Link href="/jobs/add">
+        <Link href="/jobs/add"> 
           <Button>Add New</Button>
         </Link>
         {jobs.length === 0 && (
