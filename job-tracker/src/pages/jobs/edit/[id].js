@@ -10,6 +10,7 @@ import InputGroup from '@/components/InputGroup';
 import SubmitButton from '@/components/SubmitButton';
 import AuthGuard from '@/components/AuthGuard';
 import { authFetch } from '@/lib/api';
+import Button from '@/components/Button';
 
 export default function EditJobPage() {
     const { data: session } = useSession();
@@ -21,26 +22,34 @@ export default function EditJobPage() {
         position:'',
         status: 'Applied'
     });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        if(id){
-            authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${id}`, {
-                session
-            }).then(res => res.json())
-            .then(data => {
+        const fetchJobData = async () => {
+            if (!id || !session) return;
+
+            try {
+                const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${id}`, { session });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch job data');
+                }
+                const data = await response.json();
                 setFormData(data);
-            })
-            .catch(error => {
-                console.error('Failed to fetch job data:', error);
-                alert('Failed to load job data');
-            });
-        }
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+        fetchJobData();
     }, [id, session]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${job.id}`, {
+        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${id}`, {
             session,
             method: 'PATCH',
             headers: {
@@ -99,7 +108,8 @@ export default function EditJobPage() {
                 <option value="Rejected">Rejected</option>
                 </select>
             </InputGroup>
-            <SubmitButton type="submit">Update Job</SubmitButton>
+            <Button variant="submit" type="submit">Update Job</Button>
+            <Button variant="cancel" onClick={() => router.push('/jobs')}>Cancel</Button>
             </Form>
         </AuthGuard>
         </FormContainer>

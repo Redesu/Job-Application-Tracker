@@ -23,6 +23,34 @@ const variantStyles = {
     &:hover {
       background: #d97706;
     }
+  `,
+
+  submit: css`
+    background: #2563eb;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #1d4ed8;
+  }`,
+
+  cancel: css`
+    background: #f3f4f6;
+    color: #111827;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #e5e7eb;
+    }
   `
 }
 

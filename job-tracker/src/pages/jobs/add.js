@@ -10,6 +10,7 @@ import InputGroup from '@/components/InputGroup';
 import SubmitButton from '@/components/SubmitButton';
 import AuthGuard from '@/components/AuthGuard';
 import { authFetch } from '@/lib/api';
+import Button from '@/components/Button';
 
 export default function AddJobPage() {
   const { data: session } = useSession();
@@ -88,7 +89,7 @@ export default function AddJobPage() {
             </select>
           </InputGroup>
 
-          <SubmitButton type="submit">Save Application</SubmitButton>
+          <Button variant="submit" type="submit">Save Application</Button>
         </Form>
       </AuthGuard>
     </FormContainer>

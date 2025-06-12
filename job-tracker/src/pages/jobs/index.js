@@ -11,7 +11,7 @@ import Link from 'next/link';
 import PageContainer from '@/components/PageContainer';
 import Title from '@/components/Title';
 import AuthGuard from '@/components/AuthGuard';
-import { authFetch } from '@/lib/api';
+import { authFetch, deleteJob } from '@/lib/api';
 
 export default function JobsPage() {
   const { data: session, status } = useSession({ required: false });
@@ -37,6 +37,16 @@ export default function JobsPage() {
 
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  const handleDelete = async(jobId) => {
+    try{
+      await deleteJob(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${jobId}`, { session });
+      fetchJobs();
+    } catch(err) {
+      console.error("Error deleting job:", err);
+      setError("Failed to delete job. Please try again.");
     }
   }
 
@@ -76,7 +86,7 @@ export default function JobsPage() {
                 <Link href={`/jobs/edit/${job.id || job._id}`}>
                 <Button variant="edit"><i className='bi bi-pencil-square' style={{ marginRight: '4px'}}>Edit</i></Button>
                 </Link>
-                <Button variant="delete" onClick={() => {/*TODO: Implement delete functionality*/}}>
+                <Button variant="delete" onClick={() => handleDelete(job.id || job._id)}>
                   <i className='bi bi-trash' style={{ marginRight: '4px'}}>Delete</i>
                 </Button>
               </div>

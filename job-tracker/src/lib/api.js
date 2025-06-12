@@ -4,11 +4,8 @@ async function handleFetch(url, options = {}) {
   const response = await fetch(url, options);
 
   if (response.status === 401) {
-    const errorData = await response.json();
-    if (errorData.error === 'TOKEN_EXPIRED') {
       await signOut({ callbackUrl: '/auth/login?sessionExpired=true' });
       return Promise.reject(new Error('Session expired. Please log in again.'));
-    }
   }
 
   if (!response.ok) {
@@ -37,6 +34,7 @@ export async function fetchStats(url, { session } = {
       'Authorization': `Bearer ${session?.backendToken}`
     }
   });
+  
   return response.json();
 }
 
@@ -46,6 +44,20 @@ export async function fetchPublicStats(url) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
+    }
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    return Promise.reject(error);
+  }
+  return response.json();
+}
+
+export async function deleteJob(url, { session }) {
+  const response = await handleFetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${session?.backendToken}`
     }
   });
   if (!response.ok) {
