@@ -109,7 +109,7 @@ export default function EditJobPage() {
                 </select>
             </InputGroup>
             <Button variant="submit" type="submit">Update Job</Button>
-            <Button variant="cancel" onClick={() => router.push('/jobs')}>Cancel</Button>
+            <Button variant="cancel" type= "button" onClick={() => router.push('/jobs')}>Cancel</Button>
             </Form>
         </AuthGuard>
         </FormContainer>

@@ -17,38 +17,47 @@ export default function JobsPage() {
   const { data: session, status } = useSession({ required: false });
   const [jobs, setJobs] = useState([]);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetchJobs();
+      fetchJobs(page);
     }
 
-  }, [status]);
+  }, [status, page]);
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (pageNum = 1) => {
     try {
 
-      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
+      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs?page=${pageNum}&limit=10`, {
         session
       })
       const data = await response.json();
-      setJobs(data);
-      console.log(data);
-
+      setJobs(data.jobs);
+      setTotalPages(Math.ceil(data.total / 10));
+      console.log(data.jobs);
     } catch (err) {
       console.log(err);
     }
   }
 
-  const handleDelete = async(jobId) => {
-    try{
+  const handleDelete = async (jobId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this job?");
+    if (!confirmed) return;
+    try {
+
       await deleteJob(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/${jobId}`, { session });
       fetchJobs();
-    } catch(err) {
+    } catch (err) {
       console.error("Error deleting job:", err);
       setError("Failed to delete job. Please try again.");
     }
   }
+
+  const handlePrev = () => setPage((prev) => Math.max(1, prev - 1));
+  const handleNext = () => setPage((prev) => Math.min(totalPages, prev + 1));
+
 
   if (error) {
     return (
@@ -61,11 +70,11 @@ export default function JobsPage() {
   }
 
   return (
-    /* TODO: Add pagination */
+    /* TODO: Mobile Responsiveness */
     <PageContainer>
       <AuthGuard>
         <Title>Your Job Applications</Title>
-        <Link href="/jobs/add"> 
+        <Link href="/jobs/add">
           <Button>Add New</Button>
         </Link>
         {jobs.length === 0 && (
@@ -81,18 +90,42 @@ export default function JobsPage() {
                 <h3>{job.company}</h3>
                 <p>{job.position}</p>
               </div>
-              <span>{job.status}</span>
+              <span
+                style={{
+                  fontWeight: 'bold',
+                  marginRight: '8px',
+                  textAlign: 'left',
+                  display: 'inline-block',
+                  width: '100px',
+                }}>{job.status}
+              </span>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <Link href={`/jobs/edit/${job.id || job._id}`}>
-                <Button variant="edit"><i className='bi bi-pencil-square' style={{ marginRight: '4px'}}>Edit</i></Button>
+                  <Button variant="edit"><i className='bi bi-pencil-square' style={{ marginRight: '4px' }}>Edit</i></Button>
                 </Link>
                 <Button variant="delete" onClick={() => handleDelete(job.id || job._id)}>
-                  <i className='bi bi-trash' style={{ marginRight: '4px'}}>Delete</i>
+                  <i className='bi bi-trash' style={{ marginRight: '4px' }}>Delete</i>
                 </Button>
               </div>
             </JobCard>
           ))}
         </JobList>
+        {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
+          <Button onClick={handlePrev} disabled={page === 1}>Previous</Button>
+          {Array.from({ length: totalPages }, (_, idx) => (
+            <Button
+              key={idx + 1}
+              variant={page === idx + 1 ? "edit" : "default"}
+              onClick={() => setPage(idx + 1)}
+              style={{ minWidth: 36, fontWeight: page === idx + 1 ? 'bold' : 'normal' }}
+            >
+              {idx + 1}
+            </Button>
+          ))}
+          <Button onClick={handleNext} disabled={page === totalPages}>Next</Button>
+        </div>
+        )}
       </AuthGuard>
     </PageContainer>
   );

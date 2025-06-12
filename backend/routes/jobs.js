@@ -7,13 +7,25 @@ router.use(verifyJWT);
 
 router.get('/', verifyJWT, async (req, res) => {
     try {
-        const jobs = await Job.find({ userId: req.user.userId });
-        res.status(200).json(jobs);
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const total = await Job.countDocuments({ userId: req.user.userId });
+
+
+
+        const jobs = await Job.find({ userId: req.user.userId })
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: -1 });
+        res.status(200).json({ jobs, total, page, totalPages: Math.ceil(total / limit) });
         console.log('User ' + req.user.userId + ' requested jobs')
         console.log(jobs);
     } catch (err) {
         res.status(401).json({ error: err.message });
-        console.log('User ' + req.user.userId + ' requested jobs but faileds')
+        console.log('User ' + req.user.userId + ' requested jobs but failed')
     }
 })
 

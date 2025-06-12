@@ -31,6 +31,7 @@ router.post('/handle-github-login', async (req, res) => {
       userId: user._id,
     });
 
+
   } catch (error) {
     console.error("Error in GitHub login handler:", error);
     res.status(500).json({ success: false });
