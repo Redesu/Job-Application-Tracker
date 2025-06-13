@@ -51,7 +51,18 @@ const variantStyles = {
     &:hover {
       background: #e5e7eb;
     }
+  `,
+  new: css`
+    background: #10b981;
+    color: white;
+     minWidth: 120; 
+     fontSize: '1rem';
+     boxShadow: '0 2px 8px rgba(16,185,129,0.08)';
+    &:hover {
+      background: #059669;
+    }
   `
+  
 }
 
 const Button = styled.button`

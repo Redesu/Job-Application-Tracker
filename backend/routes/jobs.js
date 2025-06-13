@@ -9,7 +9,7 @@ router.get('/', verifyJWT, async (req, res) => {
     try {
 
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit) || 5;
         const skip = (page - 1) * limit;
 
         const total = await Job.countDocuments({ userId: req.user.userId });
@@ -64,7 +64,7 @@ router.post('/', verifyJWT, async (req, res) => {
 router.patch('/:id', verifyJWT, async (req, res) => {
     try {
         const job = await Job.findByIdAndUpdate(
-            {_id: req.params.id, userId: req.user.userId},
+            { _id: req.params.id, userId: req.user.userId },
             req.body,
             { new: true }
         );
@@ -80,8 +80,8 @@ router.patch('/:id', verifyJWT, async (req, res) => {
 });
 
 router.delete('/:id', verifyJWT, async (req, res) => {
-    try{
-        const job = await Job.findByIdAndDelete({_id: req.params.id, userId: req.user.userId});
+    try {
+        const job = await Job.findByIdAndDelete({ _id: req.params.id, userId: req.user.userId });
         if (!job) {
             return res.status(404).json({ error: 'Job not found' });
         }
