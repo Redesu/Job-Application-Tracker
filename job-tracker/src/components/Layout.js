@@ -5,6 +5,7 @@ const LayoutContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100vw;
 `;
 
 const Main = styled.main`

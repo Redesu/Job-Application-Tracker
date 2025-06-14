@@ -39,18 +39,16 @@ const Dashboard = () => {
       <StatsGrid>
         {status === "loading" && <p>Loading...</p>}
         {status == "unauthenticated" && publicStats && (
-          <StatsGrid>
+          <>
             <StatsCard title="Total users" count={publicStats.totalUsers} trend={publicStats?.weeklyUsersChange ? `↑ ${publicStats.weeklyUsersChange} this week` : 'No data'} />
             <StatsCard title="Total Interviews" count={publicStats.totalApplications} trend={publicStats?.weeklyInterviewsChange ? `↑ ${publicStats.weeklyInterviewsChange} this week` : 'No data'} />
-          </StatsGrid>
+          </>
         )}
         {status === "authenticated" && (
-          <>
-            <AuthGuard>
-              <StatsCard title="Applications" count={stats.totalApplications || 0} trend={stats?.weeklyApplications ? `↑ ${stats.weeklyApplications} this week` : 'No data'} />
-              <StatsCard title="Interviews" count={stats?.totalInterviews} trend={stats?.weeklyInterviews ? `↑ ${stats.weeklyInterviews} this week` : 'No data'} />
-            </AuthGuard>
-          </>
+          <AuthGuard>
+            <StatsCard title="Applications" count={stats.totalApplications || 0} trend={stats?.weeklyApplications ? `↑ ${stats.weeklyApplications} this week` : 'No data'} />
+            <StatsCard title="Interviews" count={stats?.totalInterviews} trend={stats?.weeklyInterviews ? `↑ ${stats.weeklyInterviews} this week` : 'No data'} />
+          </AuthGuard>
         )}
       </StatsGrid>
     </DashboardContainer>

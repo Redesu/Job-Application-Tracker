@@ -14,6 +14,7 @@ import Pagination from '@/components/Pagination';
 import { useJobs } from '@/hooks/useJobs';
 import { getJobId } from '@/utils/jobs';
 
+
 export default function JobsPage() {
   const { data: session, status } = useSession({ required: false });
   const { jobs, error, page, totalPages, fetchJobs, setPage, handleDelete } = useJobs(session, status);
@@ -28,7 +29,6 @@ export default function JobsPage() {
     )
   }
   return (
-    /* TODO: Mobile Responsiveness */
     <PageContainer>
       <AuthGuard>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
