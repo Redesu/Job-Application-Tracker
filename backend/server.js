@@ -27,3 +27,5 @@ app.use('/auth', auth);
         console.error(err);
     }
 })()
+
+export { app }; // Export the app for testing purposes

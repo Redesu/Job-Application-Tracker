@@ -1,6 +1,6 @@
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiHttp from 'chai-http';
-import { app } from '../src/app.js';
+import { app } from '../server.js'
 import mongoose from 'mongoose';
 
 chai.use(chaiHttp);
@@ -16,9 +16,10 @@ before(async () => {
     });
 });
 
+
 after(async () => {
     // Disconnect from the database
-    await mongoose.connection.close();
+    await mongoose.disconnect();
 });
 
 export { chai, expect, app };

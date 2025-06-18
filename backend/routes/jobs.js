@@ -21,11 +21,8 @@ router.get('/', verifyJWT, async (req, res) => {
             .limit(limit)
             .sort({ createdAt: -1 });
         res.status(200).json({ jobs, total, page, totalPages: Math.ceil(total / limit) });
-        console.log('User ' + req.user.userId + ' requested jobs')
-        console.log(jobs);
     } catch (err) {
         res.status(401).json({ error: err.message });
-        console.log('User ' + req.user.userId + ' requested jobs but failed')
     }
 })
 
@@ -36,8 +33,6 @@ router.get('/:id', verifyJWT, async (req, res) => {
             return res.status(404).json({ error: 'Job not found' });
         }
         res.status(200).json(job);
-        console.log('User ' + req.user.userId + ' requested job with id ' + req.params.id)
-        console.log(job);
     } catch (err) {
         res.status(401).json({ error: err.message });
     }
@@ -52,8 +47,6 @@ router.post('/', verifyJWT, async (req, res) => {
             userId: req.user.userId
         });
         await job.save();
-        console.log('User ' + req.user.userId + ' created job')
-        console.log(job);
         res.status(201).json(job);
     } catch (err) {
         res.status(401).json({ error: err.message });
@@ -72,8 +65,6 @@ router.patch('/:id', verifyJWT, async (req, res) => {
             return res.status(404).json({ error: 'Job not found' });
         }
         res.status(200).json(job);
-        console.log('User ' + req.user.userId + ' updated job')
-        console.log(job);
     } catch (err) {
         res.status(401).json({ error: err.message });
     }
@@ -86,8 +77,6 @@ router.delete('/:id', verifyJWT, async (req, res) => {
             return res.status(404).json({ error: 'Job not found' });
         }
         res.status(200).json(job);
-        console.log('User ' + req.user.userId + ' deleted job')
-        console.log(job);
     } catch (err) {
         res.status(401).json({ error: err.message });
     };

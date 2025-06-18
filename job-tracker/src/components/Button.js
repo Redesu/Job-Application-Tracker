@@ -8,10 +8,11 @@ const variantStyles = {
       background: #1d4ed8;
     }
   `,
-  
+
   delete: css`
     background: #ef4444;
     color: white;
+    min-width: 50px;
     &:hover {
       background: #dc2626;
     }
@@ -62,7 +63,7 @@ const variantStyles = {
       background: #059669;
     }
   `
-  
+
 }
 
 const Button = styled.button`
@@ -74,6 +75,6 @@ const Button = styled.button`
   transition: background 0.2s;
   cursor: pointer;
   position: static;
-${({ variant}) => variantStyles[variant || 'default']}
+${({ variant }) => variantStyles[variant || 'default']}
 `;
 export default Button
