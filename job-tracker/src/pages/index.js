@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState(0);
   const [publicStats, setPublicStats] = useState(null);
   const [error, setError] = useState(null);
+  const [isBackendDown, setIsBackendDown] = useState(false);
 
   useEffect(() => {
     async function getStats() {
@@ -22,21 +23,34 @@ const Dashboard = () => {
           const data = await fetchPublicStats(`${process.env.NEXT_PUBLIC_API_URL}/api/publicStats`);
           setPublicStats(data);
         }
+        setIsBackendDown(false);
       } catch (err) {
-        setError(err);
+
+        if (err.details === 'Network error' || err.message === 'Unable to connect to the server. Please try again later.') {
+          setIsBackendDown(true);
+        }
+
       }
     }
     getStats();
   }, [status]);
 
-  if (error) {
-    return null;
+  if (isBackendDown) {
+    return (
+      <DashboardContainer>
+        <div className="p-4 bg-red-100 border-l-4 border-red-500 text-red-700 width-500">
+          <p className="font-bold">Service Temporarily Unavailable</p>
+          <p>We're having trouble connecting to our servers. Please try again later.</p>
+        </div>
+      </DashboardContainer>
+    );
   }
 
   return (
     <DashboardContainer>
 
       <StatsGrid>
+
         {status === "loading" && <p>Loading...</p>}
         {status == "unauthenticated" && publicStats && (
           <>

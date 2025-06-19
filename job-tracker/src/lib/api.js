@@ -1,19 +1,26 @@
 import { signOut, signIn } from "next-auth/react";
 
 async function handleFetch(url, options = {}) {
-  const response = await fetch(url, options);
+  try {
+    const response = await fetch(url, options);
 
-  if (response.status === 401) {
-    await signOut({ callbackUrl: '/auth/login?sessionExpired=true' });
-    return Promise.reject(new Error('Session expired. Please log in again.'));
+    if (response.status === 401) {
+      await signOut({ callbackUrl: '/auth/login?sessionExpired=true' });
+      return Promise.reject(new Error('Session expired. Please log in again.'));
+    }
+
+    if (!response.ok) {
+      const error = await response.json();
+      return Promise.reject(error);
+    }
+
+    return response;
+  } catch (err) {
+    return Promise.reject({
+      message: 'Unable to connect to the server. Please try again later.',
+      details: err.message || 'Network error'
+    })
   }
-
-  if (!response.ok) {
-    const error = await response.json();
-    return Promise.reject(error);
-  }
-
-  return response;
 }
 
 export async function authFetch(url, { session, ...options } = {}) {
