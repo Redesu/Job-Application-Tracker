@@ -28,4 +28,4 @@ app.use('/auth', auth);
     }
 })()
 
-export { app }; // Export the app for testing purposes
+export { app }; // Exporting the app for testing purposes

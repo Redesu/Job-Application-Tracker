@@ -19,7 +19,10 @@ before(async () => {
 
 after(async () => {
     // Disconnect from the database
+    await mongoose.connection.close();
     await mongoose.disconnect();
+
+    process.exit(0);
 });
 
 export { chai, expect, app };

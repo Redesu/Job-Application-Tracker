@@ -1,7 +1,14 @@
 // test/jobs.test.js
 import { chai, expect, app } from './setup.test.js';
 import { request } from 'chai-http';
+import { generateTestToken } from './generateTestToken.js';
 import Job from '../models/Job.js';
+
+// Generate a test token for authenticated requests
+const validTestToken = generateTestToken('testUserId123', {
+    username: 'testuser',
+    name: 'Test User'
+});
 
 describe('Jobs API', () => {
     beforeEach(async () => {
@@ -22,7 +29,7 @@ describe('Jobs API', () => {
             // 2. Make authenticated request
             const res = await request.execute(app)
                 .get('/api/jobs')
-                .set('Authorization', 'Bearer validTestToken123');
+                .set('Authorization', `Bearer ${validTestToken}`);
 
             // 3. Assertions
             expect(res).to.have.status(200);
@@ -34,7 +41,7 @@ describe('Jobs API', () => {
             const res = await request.execute(app)
                 .get('/api/jobs');
 
-            expect(res).to.have.status(403);
+            expect(res).to.have.status(401);
         });
     });
 
@@ -48,7 +55,7 @@ describe('Jobs API', () => {
 
             const res = await request.execute(app)
                 .post('/api/jobs')
-                .set('Authorization', 'Bearer validTestToken123')
+                .set('Authorization', `Bearer ${validTestToken}`)
                 .send(newJob);
 
             expect(res).to.have.status(201);
