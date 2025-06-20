@@ -1,5 +1,7 @@
 # Job Application Tracker
 
+![Dashboard Screenshot](https://i.imgur.com/Lcz1BXa.png)
+
 A full-stack job application tracking system built with **Node.js**, **Express**, **MongoDB** (backend) and **Next.js**, **NextAuth.js** (frontend).
 
 ---
@@ -7,8 +9,11 @@ A full-stack job application tracking system built with **Node.js**, **Express**
 ## Features
 
 - User authentication with GitHub (NextAuth.js)
+![Login Screenshot](https://i.imgur.com/OLo5UUa.png)
 - Track job applications (CRUD)
+![CRUD Screenshot](https://i.imgur.com/r0xAtgL.png)
 - Stats dashboard (applications, interviews, etc.)
+![Stats Screenshot](https://i.imgur.com/Lcz1BXa.png)
 - Responsive UI with styled-components
 - RESTful API backend
 
