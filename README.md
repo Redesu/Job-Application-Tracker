@@ -42,7 +42,7 @@ A full-stack job application tracking system built with **Node.js**, **Express**
 ### 1. Clone the repository
 
 ```sh
-git clone https://github.com/your-username/Job-Application-Tracker.git
+git clone https://github.com/Redesu/Job-Application-Tracker
 cd Job-Application-Tracker
 ```
 
